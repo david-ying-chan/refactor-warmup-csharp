@@ -34,6 +34,31 @@ namespace refactor_gym_warmup_2020.cashier
             return output.ToString();
         }
 
+        public double GetTotalSalesTax()
+        {
+            double totalSalesTax = 0d;
+            
+            foreach (LineItem lineItem in order.GetLineItems())
+            {
+                // calculate sales tax @ rate of 10%
+                totalSalesTax += lineItem.TotalAmount() * .10;
+            }
+
+            return totalSalesTax;
+        }
+
+        public double GetTotal()
+        {
+            double total = 0d;
+            
+            foreach (LineItem lineItem in order.GetLineItems())
+            {
+                total += lineItem.TotalAmount() * (1 + .10);
+            }
+
+            return total;
+        }
+
         public string PrintReceipt()
         {
             StringBuilder output = new StringBuilder();
@@ -47,27 +72,16 @@ namespace refactor_gym_warmup_2020.cashier
             output.Append(order.GetCustomerAddress());
 //        output.Append(order.getCustomerLoyaltyNumber());
 
-            // prints lineItems
-            double totSalesTx = 0d;
-            double tot = 0d;
-
             foreach (LineItem lineItem in order.GetLineItems())
             {
                 output.Append(GetItemOutput(lineItem));
-
-                // calculate sales tax @ rate of 10%
-                double salesTax = lineItem.TotalAmount() * .10;
-                totSalesTx += salesTax;
-
-                // calculate total amount of lineItem = price * quantity + 10 % sales tax
-                tot += lineItem.TotalAmount() + salesTax;
             }
 
             // prints the state tax
-            output.Append("Sales Tax").Append('\t').Append(totSalesTx);
+            output.Append("Sales Tax").Append('\t').Append(GetTotalSalesTax());
 
             // print total amount
-            output.Append("Total Amount").Append('\t').Append(tot);
+            output.Append("Total Amount").Append('\t').Append(GetTotal());
             return output.ToString();
         }
     }
