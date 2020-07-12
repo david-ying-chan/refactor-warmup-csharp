@@ -2,7 +2,7 @@ using System.Text;
 
 namespace refactor_gym_warmup_2020.cashier
 {
-    /**
+ /**
  * OrderReceipt prints the details of order including customer name, address, description, quantity,
  * price and amount. It also calculates the sales tax @ 10% and prints as part
  * of order. It computes the total order amount (amount of individual lineItems +
@@ -16,6 +16,22 @@ namespace refactor_gym_warmup_2020.cashier
         public OrderReceipt(Order order)
         {
             this.order = order;
+        }
+
+        public string GetItemOutput(LineItem lineItem)
+        {
+            StringBuilder output = new StringBuilder();
+            
+            output.Append(lineItem.GetDescription());
+            output.Append('\t');
+            output.Append(lineItem.GetPrice());
+            output.Append('\t');
+            output.Append(lineItem.GetQuantity());
+            output.Append('\t');
+            output.Append(lineItem.TotalAmount());
+            output.Append('\n');
+
+            return output.ToString();
         }
 
         public string PrintReceipt()
@@ -37,14 +53,7 @@ namespace refactor_gym_warmup_2020.cashier
 
             foreach (LineItem lineItem in order.GetLineItems())
             {
-                output.Append(lineItem.GetDescription());
-                output.Append('\t');
-                output.Append(lineItem.GetPrice());
-                output.Append('\t');
-                output.Append(lineItem.GetQuantity());
-                output.Append('\t');
-                output.Append(lineItem.TotalAmount());
-                output.Append('\n');
+                output.Append(GetItemOutput(lineItem));
 
                 // calculate sales tax @ rate of 10%
                 double salesTax = lineItem.TotalAmount() * .10;
